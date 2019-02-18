@@ -1,60 +1,83 @@
-import React, { Component }  from 'react';
-import { connect } from 'react-redux';
-import uuid from 'uuid/v4'
-import PropTypes from 'prop-types';
-import Screen from '../../container/screen';
-import { load } from '../../redux/actions/appInfo';
+import React, { Component } from 'react';
+import JsonInput from '../../components/JsonInput/JsonInput';
+import UiDisplay from '../../components/UiDisplay/UiDisplay';
 import './style.css';
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      content: {
+        type: 'box',
+        message: 'Hello',
+        background: '#058893',
+        children: [
+          {
+            type: 'text',
+            message: 'foo',
+          },
+          {
+            type: 'text',
+            message: 'bar',
+          },
+          {
+            type: 'box',
+            message: 'bowtie',
+            background: '#FF5733',
+            children: [
+              {
+                type: 'text',
+                message: 'insurance',
+              },
+              {
+                type: 'box',
+                background: 'white',
+                message: 'insurance',
+                children: [
+                  {
+                    type: 'text',
+                    message: 'insurance',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            type: 'box',
+            background: 'white',
+            message: 'insurance',
+          },
+        ],
+      },
+    };
 
-  componentWillMount() {
-    const { match: { params }, load } = this.props;
-    const consent = typeof params.consentId === 'undefined' ? uuid().replace(/-/g, '') : params.consentId;
-    console.log(consent);
-    load(params.appId, consent)
+    this._onEdit = this._onEdit.bind(this);
   }
 
-  toTnc = () => {
-    const { history } = this.props;
-    return history.push('/tnc');
-  };
+  _onEdit({updated_src: newContent}) {
+    // an improvement is to do validations here,
+    // but at this stage, it would better to simply ignore unknown keys
+
+    this.setState({
+      content: newContent,
+    });
+  }
 
   render() {
+    const { content } = this.state;
     return (
-      <Screen>
-        <div className="container">
-          <h1 className="hashtag">#TakeBackYourData</h1>
+      <div className="container">
+        <div className="panel">
+          <JsonInput content={content} onEdit={this._onEdit} />
         </div>
-        <div className="container">
-          <p className="title">Get free stuff sponsored by our partners</p>
-          <p className="text">Datum rewards users for sharing their data</p>
-          <p className="text">#TakeBackYourData</p>
+        <div className="panel">
+          <UiDisplay content={content} />
         </div>
-        <div className="container">
-          <div className="commentContainer">
-            <p className="indicator">!</p>
-            <p className="comment">You can opt-out at any time</p>
-          </div>
-          <button type="button" className="button" onClick={this.toTnc}>Let's Go</button>
-        </div>
-      </Screen>
-    )
+      </div>
+    );
   }
 }
 
-Home.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func
-  })
-};
+Home.propTypes = {};
 
-const mapStateToProps = state => ({
-  appInfo: state.appInfo
-});
-
-const mapDispatchToProps = dispatch => ({
-  load: (appId, consentId) => dispatch(load(appId, consentId))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

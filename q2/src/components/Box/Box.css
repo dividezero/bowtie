@@ -1,0 +1,13 @@
+.Box {
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: 8px;
+}
+
+.Box .title {
+  font-weight: bold;
+}
+
+.Box .content {
+  padding: 16px;
+}
