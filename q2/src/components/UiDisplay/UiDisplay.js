@@ -1,16 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Element from '../Element/Element';
 
+import './UiDisplay.css';
+
 const UiDisplay = ({ content }) => (
-  <div
-    style={{
-      padding: 30,
-    }}
-  >
-    {content.type && <Element {...content} />}
-  </div>
+  <div className="UiDisplay">{content.type && <Element {...content} />}</div>
 );
 
 // Description - appears in the storybook item
