@@ -2,6 +2,7 @@
 
 Built using a react starter i personally made
 
+https://bowtie-q2.netlify.com/
 
 ## Getting Started
 
